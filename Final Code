@@ -1,0 +1,60 @@
+from tkinter import filedialog
+from tkinter import *
+import pandas as pd
+
+def parseFile():
+    df = pd.read_csv('example.csv')
+    bitData = df[['Line Number','Pilot','Date','Avionics BIT','BIT Pers']]
+    bitData.to_csv('modified_example.csv')
+        
+def fileDialog():
+    fileName = filedialog.askopenfilename()
+    label = Label(text=fileName).place(x=10,y=180)
+    
+def faultCodes(event=None):
+    entry_text = var.get()
+    if entry_text == "500" or entry_text == "514":
+       label['text'] = "Follow fault code 9621F4A4."
+    elif entry_text == "918":
+        label['text'] = "Follow fault code 9621A1B2."
+    elif entry_text == "7152":
+        label['text'] = "Follow fault code 9621B2C1."
+    else:
+        label['text'] = "Enter a fault code."
+        
+top = Tk()
+top.title("IFT 402 Final Build")
+top.geometry("500x500")
+var = StringVar()
+
+top.wm_iconbitmap(r'D:\IFT402\boeing.ico')
+    
+labelframe = LabelFrame(top, text="Directions")  
+labelframe.pack(fill='both', expand='yes')
+left = Label(labelframe,text="1. Copy DTM data on to the disc in debrief.")
+left1 = Label(labelframe,text="2. Place disc in your computer and copy information to your machine.")
+left2 = Label(labelframe,text="3. Select the file name in the dialog box.")
+left3 = Label(labelframe,text="4. Click Submit")
+
+B = Button(top, text="Browse...", command = fileDialog)
+B2 = Button(top, text="Submit...",command = parseFile)
+E = Entry(top,text='var',textvariable=var,bd=5)
+B3 = Button(top,text="Search...",command = faultCodes)
+label = Label(top,text='')
+label2 = Label(top,text="Enter fault code for fault isolation.")
+
+
+
+
+label2.place(x=5,y=375)
+label.place(x=5,y=425)
+left.pack()
+left1.pack()
+left2.pack()
+left3.pack()
+E.place(x=5,y=400)
+B.place(x=5,y=150)
+B2.place(x=5,y=200)
+B3.place(x=5,y=450)
+E.bind('<Return>', faultCodes)
+mainloop()
